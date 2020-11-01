@@ -1,6 +1,9 @@
 **This package includes a dynamixel template based on official source codes and several personal notes.**
 
+*观众老爷们！ star 一下*
+
 ### 使用指南笔记链接
+
 > 由于为知笔记不支持整个文件夹的分享，因此每一个note对应一个链接，请自取食用。
 
 （一）dynamixel 舵机 ros 使用指南 —— 单舵机控制
