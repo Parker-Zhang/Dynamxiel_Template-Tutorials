@@ -1,0 +1,6 @@
+<launch>
+  <param name="trajectory_info" value="$(find my_dynamixel_workbench)/cfg/trajectory_01.yaml"/>
+  <node name="my_dynamixel_operator" pkg="my_dynamixel_workbench" type="my_dynamixel_operator"
+        required="true" output="screen" >
+  </node>
+</launch>

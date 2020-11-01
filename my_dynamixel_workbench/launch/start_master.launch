@@ -1,0 +1,13 @@
+<launch>
+    <arg name="usb_port"    default="/dev/ttyUSB0"/>
+    <arg name="dxl_baud_rate"   default="57600"/>    
+    <param name="dynamixel_info"    value="$(find my_dynamixel_workbench)/cfg/motorInit01.yaml"/>
+    <node name="my_dxl_master" pkg="my_dynamixel_workbench" type="my_dynamixel_controller" 
+            output="screen"    args="$(arg usb_port) $(arg dxl_baud_rate)" >
+        <rosparam>
+        dxl_read_period: 0.010f
+        dxl_write_period: 0.010f
+        publish_period: 0.10f
+        </rosparam>
+    </node>
+</launch>

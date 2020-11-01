@@ -1,0 +1,16 @@
+zero:
+  ID: 0
+  Operating_Mode: 2
+  Current_Limit: 10
+  Torque_Enable: 1
+first:
+  ID: 1
+  Operating_Mode: 2
+  Current_Limit: 10
+  Torque_Enable: 1
+
+second:
+  ID: 2
+  Operating_Mode: 2
+  Current_Limit: 10
+  Torque_Enable: 1

@@ -1,8 +1,8 @@
-#README
-This package includes a dynamixel template based on official source codes and several personal notes.
+**This package includes a dynamixel template based on official source codes and several personal notes.**
 
 ### 使用指南笔记链接
 > 由于为知笔记不支持整个文件夹的分享，因此每一个note对应一个链接，请自取食用。
+
 （一）dynamixel 舵机 ros 使用指南 —— 单舵机控制
 https://3bdab0d0.wiz03.com/wapp/pages/view/share/s/0XSH3g0Re17G2w9IJE12tWll3Ooo9M0dlh7H2kGodc1albsm
 
@@ -20,7 +20,9 @@ https://3bdab0d0.wiz03.com/wapp/pages/view/share/s/0XSH3g0Re17G2w9IJE12tWll22Ual
 
 ### 模板源码链接
 
+https://github.com/Parker-Zhang/Dynamxiel_Template-Tutorials.git
 
+git@github.com:Parker-Zhang/Dynamxiel_Template-Tutorials.git
 
 ### 官方链接汇总
  官方教程
