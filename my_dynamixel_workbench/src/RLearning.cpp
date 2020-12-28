@@ -6,22 +6,24 @@
 
 #include <cstdlib>
 
-using namespace Eigen;
+
 //ros
 #include<dynamixel_workbench_toolbox/dynamixel_workbench.h>
 #include<ros/ros.h>
-#include<my_dynamixel_workbench_test/dxl_state.h>
 //iostream
 #include <iostream>
 #include <fstream>
 #include <sstream>
 using namespace std;
+using namespace Eigen;
 //predefine
 #define BAUDRATE 57600
 #define ID 1
 #define random(x) (rand()%x)
 #define PI 3.1415926
 
+#define TEST
+#define TRACK_TEST
 
 
 //////////////////////////    begin    //////////////////////////
@@ -33,23 +35,39 @@ int main(int argc,char **argv)
 	int update_step =  2;
 	double gam = 0.85;
 	Eigen::MatrixXd Qx(2, 2);
-	Qx(0,0) = 1000;		Qx(1,0) = 0;	Qx(0,1) = 0;
+	Qx(0,0) = 3000;		Qx(1,0) = 0;	Qx(0,1) = 0;
 	Qx(1,1) = 10;
 	double Qu = 1;
 
-	int       tar_position = 4096/2;
+	int       tar_position = 1000;	//2091
 	double 	  tar_pos = tar_position*0.088/180*PI;
+	#ifdef TRACK_TEST
+	double tar_pos_offset = tar_pos;
+	double tar_pos_am = 200*0.088/180*PI;
+	double frequence = 1.5;
+	#endif
 	int noise_trial = 20;
 	bool noise_change = true;
 	bool K_limit = false;
 	bool is_current_control = false;
-	bool position_limit_flag = false;
-	bool AC_control = false;
+	bool position_limit_flag = true;
+	bool AC_control = true;
 	bool index_jsum_change = false;
 	int P_scale = 1000;
-	int ini_pos = 1000;
+	int ini_pos = 1500;
 	int dt = 300*1000;
+	int max_pos = 1800;
+	int min_pos = 300;
 	float K1 = -1;	float K2 = -1;
+	#ifdef TEST
+		// K1 = -20.4078;	K2 = -4.40102;
+		K1 = -35.5301;	K2 = -6.6606;
+		eps_max = 1;
+		dt = 100*1000;
+	#endif
+
+	srand(rand());	//随机得到一个seed
+
 	int32_t 		limit_current = 450;	//2.69 [mA]
 
 	std::ofstream CoeffRecoder("Z_CoeffRecoder.txt");
@@ -61,7 +79,6 @@ int main(int argc,char **argv)
 
 	//////////////////////////	  on-offs    //////////////////////////
 	bool check = false;
-
 
 	//////////////////////////	  state variable    //////////////////////////
 	Eigen::MatrixXd state(2,1) ;	Eigen::MatrixXd statePre(2,1) ;	
@@ -83,38 +100,32 @@ int main(int argc,char **argv)
 	Eigen::MatrixXd eye(1,1);		eye(0,0) = 1;
 	Eigen::MatrixXd temp(1,1);		temp(0,0) = 1;
 
-  ros::init(argc,argv,"ACimpedent");
-  ros::NodeHandle n;
-  ros::Publisher  dxl_state_pub = n.advertise<my_dynamixel_workbench_test::dxl_state>("dxl_state_topic",100);  //定义舵机状态发布器
-  my_dynamixel_workbench_test::dxl_state msg;
+	ros::init(argc,argv,"ACimpedent");
+	ros::NodeHandle n;
   
 
 
   //////////////////////////    舵机数据定义
-  int32_t 		position_data = 0;
-  double 	position = 0.0;
-  int32_t 	velocity_data = 0;
-  double 	velocity = 0.0;
-  int32_t	current_data = 0;
-  double 	current = 0.0;
-  int32_t	 	goal_current;
+	int32_t 		position_data = 0;
+	double 	position = 0.0;
+	int32_t 	velocity_data = 0;
+	double 	velocity = 0.0;
+	int32_t	current_data = 0;
+	double 	current = 0.0;
+	int32_t	 	goal_current;
 
 
  
   //////////////////////////    连接舵机，设置电流控制模式
-  DynamixelWorkbench dxl_wb; 
-  dxl_wb.begin("/dev/ttyUSB0",BAUDRATE);
-  dxl_wb.ping(ID);
-  dxl_wb.ledOff(ID);
-  ROS_INFO("Welcome my dynamixel workbench!");
-  dxl_wb.setCurrentControlMode(ID);
-//   dxl_wb.itemRead(ID,"Current_Limit",&limit_current);
-//   dxl_wb.itemRead(ID,"Velocity_Limit",&limit_current);
-  dxl_wb.torqueOn(ID);
+	DynamixelWorkbench dxl_wb; 
+	dxl_wb.begin("/dev/ttyUSB0",BAUDRATE);
+	dxl_wb.ping(ID);
+	dxl_wb.ledOff(ID);
+	ROS_INFO("Welcome my dynamixel workbench!");
+	dxl_wb.setCurrentControlMode(ID);
+	dxl_wb.torqueOn(ID);
   
   //////////////////////////    舵机初始化
-  
-
   dxl_wb.itemRead(ID,"Present_Position",&position_data);
 	// position = dxl_wb.convertValue2Position(ID,position_data);
 	position = position_data*0.088/180*PI;
@@ -127,8 +138,8 @@ int main(int argc,char **argv)
   
   //////////////////////////	定义信息流
   // 在home下创建文件夹 ACimpedent
-  std::ofstream StatesRecoder("Z_statusRecoder.txt");
-  std::ofstream KRecoder("Z_kRecoder.txt");
+  std::ofstream StatesRecoder("Z_statusRecoder.xls");
+  std::ofstream KRecoder("Z_kRecoder.xls");
   std::ofstream JsumRecoder("Z_JsumRecoder.txt");
   
   //////////////////////////	学习过程     //////////////////////////
@@ -146,7 +157,6 @@ int main(int argc,char **argv)
 
 	 usleep(2000 * 1000);  	 
 	 ROS_INFO("******      reach init pos      ******");
-	
 	
 	 //////////////////////////	   学习开始
 	 //修改控制模型并获得当前状态
@@ -172,11 +182,10 @@ int main(int argc,char **argv)
 	 dxl_wb.itemRead(ID,"Present_Current" ,&current_data);
 	 current	 = current_data*2.69;   // mA
 	 
-	 StatesRecoder << position_data << ";   " << velocity_data << ";   " << int16_t(current_data) << ";   " <<0<<std::endl;
-	 KRecoder      << K(0,0) 		   << ";   " << K(0,1) 		 << ";   " << std::endl;
+	 StatesRecoder << position_data << "\t" << velocity_data << "\t" << int16_t(current_data) << "\t" <<0<<"\t"<< tar_pos <<"\t"<<position<<std::endl;
+	//  KRecoder      << K(0,0) 		   << ";   " << K(0,1) 		 << ";   " << std::endl;
+	KRecoder      << K(0,0) 	<<"\t"	   << K(0,1) 		 << std::endl;
 	 JsumRecoder <<	0	<<";   " <<	0	<<";   " << std::endl;
-	 
-	 //
 
 
 	 // 获得起始状态，通过除以一个系数使得系统计算值不要太大，通过减去tar_position将目标位置调节至零位
@@ -205,6 +214,9 @@ int main(int argc,char **argv)
 			 uMat(0,0)= -(limit_current-noise_trial);
 		 }
 		// uMat(0,0)=0;
+		u = uMat(0,0);
+
+		#ifndef TEST
 		if(noise_change)
 		{
 			if(is_current_control)
@@ -214,7 +226,6 @@ int main(int argc,char **argv)
 				// {
 				// 	temp2 = noise_trial*0.2;
 				// }
-					
 				u        = uMat(0,0) + temp2;
 			}
 			else{
@@ -225,9 +236,8 @@ int main(int argc,char **argv)
 		else{
 			u        = uMat(0,0) +noise_trial*float(rand()%1000-500)/500.0;
 		}
-		
+		#endif
 		//  u =round(u);	
-		
 
 		if(is_current_control)
 		{
@@ -254,14 +264,19 @@ int main(int argc,char **argv)
 		 cout<< "current_data:" << int16_t(current_data);
 		 f = 0;        				//f =  externalF();
 		 // 通过除以一个系数使得系统计算值不要太大，通过减去tar_position将目标位置调节至零位
+		#ifdef TRACK_TEST
+			tar_pos = tar_pos_offset + tar_pos_am*sin(2*PI*frequence*step/(step_max-5));
+
+		#endif
+
 		 state(0,0) = position - tar_pos;	
 		 state(1,0) = velocity;
 		 
 		 //////////////////////////	  检查位置是否超限,未超限则进行调整
 		 if (position_limit_flag)
 		 {
-			if ( position_data > 4000)		{check = 0;}
-			if ( position_data < 100)		{check = 0;}
+			if ( position_data > max_pos)		{check = 0;}
+			if ( position_data < min_pos)		{check = 0;}
 			ROS_INFO("check: %d ",check);
 		 }
 		 
@@ -305,12 +320,15 @@ int main(int argc,char **argv)
 				
 		// 	}
 		// }
+
 		  temp 		 = eye+phi.transpose()*P*phi;   temp = temp.inverse();
 		  gradient   = P*phi*(costMat - phi.transpose()*theta)*temp;
 		  P          = P-P*phi*phi.transpose()*P*temp(0,0);
 		  theta      = theta + gradient;
 
 		 //////////////////////////	AC学习更新部分
+		#ifndef TEST
+
 		 if (AC_control)
 		 {
 			H21(0,0) = theta(2,0)/2; 
@@ -325,29 +343,22 @@ int main(int argc,char **argv)
 			}
 			
 			Jsum = index_Jum*(H21+Kac*H22);
-			// if (Jsum.norm() > 50)
-			// {
-			// 	Jsum(0,0)=0;
-			// 	Jsum(0,1)=0;
-			// }
 			std::cout << "index_Jum:     " << index_Jum<<endl;
 			std::cout << "Jsum:     " << Jsum<<endl;
 			
 			Kac = Kac-Jsum;
 			if (step>update_step*1 && (step % update_step == 0) )	{ K = Kac;}	
 		 }
- 
-
-
+		#endif
 		 //////////////////////////	数据显示和记录
 		//  std::cout << "Kac    :   " << Kac(0,0) 		  << " " << Kac(0,1)  		 << " " << std::endl;
 		 std::cout << "K    :   " << K  <<endl;
 
          // save data state
         //  StatesRecoder << position_data << ";   " << velocity_data << ";   " << goal_current << ";   " <<std::endl;
-	     StatesRecoder << position_data << ";   " << velocity_data << ";   " << int16_t(current_data) << ";   " <<goal_current<<std::endl;
-		 KRecoder      << K(0,0) 		   << ";   " << K(0,1) 		 << ";   " << std::endl;
-		 JsumRecoder <<	u	<<";   " <<	uMat(0,0)	<<";   " << std::endl;
+	     StatesRecoder << position_data << "\t" << velocity_data << "\t" << int16_t(current_data) << "\t" <<goal_current<<"\t"<<tar_pos<<"\t"<<position<<std::endl;
+		 KRecoder      << K(0,0) 		   << "\t" << K(0,1) 		 << "\t" << std::endl;
+		 JsumRecoder <<	u	<<"\t" <<	uMat(0,0)	<<"\t" << std::endl;
 		//  TestRecoder << u << ";  " << position_data <<";  " << velocity_data<< std::endl; 
 		
 		}
@@ -374,9 +385,7 @@ int main(int argc,char **argv)
 	
   ROS_INFO("******      learning terminated      ******");
 }
-  
-  
-  
+
   
   
   

@@ -1,6 +1,6 @@
 zero:
   ID: 0
-  Operating_Mode: 2
+  Operating_Mode: 2	# 2 表示位置控制 1 表示速度控制 0 表示电流控制
   Current_Limit: 10
   Torque_Enable: 1
 first:

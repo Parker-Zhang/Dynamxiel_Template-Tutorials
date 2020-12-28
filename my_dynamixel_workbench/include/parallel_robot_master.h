@@ -89,6 +89,11 @@ public:
     void initSubscriber(void);
     void initPublisher(void);
 
+
+    void torqueOffALL(void);
+    void torqueOnALL(void);
+    
+
   // callback
     // bool changePositionCallback(my_dynamixel_workbench::ChangeGoalPosition::Request &req
     //                               ,my_dynamixel_workbench::ChangeGoalPosition::Response &res);

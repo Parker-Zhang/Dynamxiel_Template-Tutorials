@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/parker/catkin_ws/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/parker/catkin_ws/src/DynamixelSDK/ros/include/**",
+                "/home/parker/catkin_ws/src/dynamixel-workbench/dynamixel_workbench_controllers/include/**",
+                "/home/parker/catkin_ws/src/dynamixel-workbench/dynamixel_workbench_operators/include/**",
+                "/home/parker/catkin_ws/src/dynamixel-workbench/dynamixel_workbench_toolbox/include/**",
+                "/home/parker/catkin_ws/src/my_dynamixel_workbench/include/**",
+                "/home/parker/catkin_ws/src/my_dynamixel_workbench_test/include/**",
+                "/home/parker/catkin_ws/src/netft_utils/include/**",
+                "/home/parker/catkin_ws/src/probot_anno_ikfast_manipulator_plugin/include/**",
+                "/home/parker/catkin_ws/src/robot_control/include/**",
+                "/home/parker/catkin_ws/src/test/include/**",
+                "/home/parker/catkin_ws/src/universal_robot/ur_kinematics/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}

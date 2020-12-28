@@ -1,0 +1,19 @@
+zero:
+  ID: 0
+  Operating_Mode: 2	#位置控制模式
+#  Current_Limit: 10
+#  Velocity_Limit: 
+#  Max_Position_Limit:
+#  Min_Position_Limit:
+  Torque_Enable: 0
+first:
+  ID: 1
+  Operating_Mode: 2
+  Current_Limit: 10
+  Torque_Enable: 0
+
+second:
+  ID: 2
+  Operating_Mode: 2
+  Current_Limit: 10
+  Torque_Enable: 0

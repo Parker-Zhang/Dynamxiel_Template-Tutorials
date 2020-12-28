@@ -31,7 +31,7 @@ private:
   ros::NodeHandle priv_node_handle_;      
 
   std::map<std::string, uint32_t> dynamixel_;
-  std::map<std::string, const ControlItem*> control_items_;
+
   std::vector<std::pair<std::string, ItemValue>> dynamixel_info_;
   dynamixel_workbench_msgs::DynamixelStateList dynamixel_state_list_;
 
@@ -78,6 +78,7 @@ private:
 public:
   // Dynamixel Workbench Parameters
     DynamixelWorkbench *dxl_wb_;
+      std::map<std::string, const ControlItem*> control_items_;
     MyDynamixelController();
     bool initWorkbench(const std::string port_name, const uint32_t baud_rate);
     bool getDynamixelsInfo(const std::string yaml_file);
@@ -89,6 +90,10 @@ public:
     void initSubscriber(void);
     void initPublisher(void);
 
+    void syncReadData(uint8_t *id_array,uint8_t id_cnt, Eigen::MatrixXd & state,Eigen::MatrixXd & current);
+    void syncWriteData(int control_mode ,uint8_t *id_array,uint8_t id_cnt,int32_t * goal);
+    void torqueOffALL(void);
+    void torqueOnALL(void);
   // callback
     // bool changePositionCallback(my_dynamixel_workbench::ChangeGoalPosition::Request &req
     //                               ,my_dynamixel_workbench::ChangeGoalPosition::Response &res);

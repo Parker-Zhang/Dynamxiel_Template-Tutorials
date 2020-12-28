@@ -83,4 +83,12 @@ target_link_libraries(my_dynamixel_controller ${catkin_LIBRARIES} ${Eigen3_LIBRA
 add_executable(my_dynamixel_operator src/my_operator.cpp)
 target_link_libraries(my_dynamixel_operator ${catkin_LIBRARIES} ${YAML_CPP_LIBRARIES})
 
+add_executable(parallel_robot_master src/parallel_robot_master.cpp src/trajectory_generator.cpp)
+target_link_libraries(parallel_robot_master ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${YAML_CPP_LIBRARIES})
+
+add_executable(RLearning src/RLearning.cpp )
+target_link_libraries(RLearning ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
+
+add_executable(RL_3DofSerialRobot src/RL_3DofSerialRobot.cpp src/trajectory_generator.cpp)
+target_link_libraries(RL_3DofSerialRobot ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${YAML_CPP_LIBRARIES})
 

@@ -1,0 +1,8 @@
+joint:
+  names: [zero,first,second]
+trajectory:
+  index: [wp1]
+  wp1:
+    pos: [5.218953,0.396260,2.478926]
+    time_from_start: 0.50000
+  

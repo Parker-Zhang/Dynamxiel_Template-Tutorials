@@ -1,0 +1,19 @@
+zero:
+  ID: 0
+#  Operating_Mode: 3	# 3 表示位置控制 1 表示速度控制 0 表示电流控制
+# Current_Limit: 300
+#  Velocity_Limit: 1000
+  Torque_Enable: 1
+first:
+  ID: 1
+#  Operating_Mode: 0
+#  Current_Limit: 300
+#  Velocity_Limit: 1000
+  Torque_Enable: 1
+
+second:
+  ID: 2
+#  Operating_Mode: 0
+#  Current_Limit: 300
+#  Velocity_Limit: 1000
+  Torque_Enable: 1
