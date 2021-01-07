@@ -38,19 +38,19 @@ endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
 
 
 ## Generate messages in the 'msg' folder
- add_message_files(
-   FILES
+# add_message_files(
+#   FILES
     #dxl_state.msg
     #desired_trajectory.msg
- )
+#)
 
 ## Generate services in the 'srv' folder
- add_service_files(
-   FILES
+# add_service_files(
+#   FILES
     #DynamixelCommand.srv
 
 
- )
+# )
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
@@ -63,7 +63,6 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES my_dynamixel_workbench
   CATKIN_DEPENDS dynamixel_workbench_toolbox roscpp std_msgs dynamixel_workbench_msgs message_runtime
-#  DEPENDS system_lib
   DEPENDS EIGEN3
 )
 
@@ -77,18 +76,14 @@ include_directories(
 
 
 
-add_executable(my_dynamixel_controller src/my_dxl_master.cpp src/trajectory_generator.cpp)
-target_link_libraries(my_dynamixel_controller ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${YAML_CPP_LIBRARIES})
+add_executable(my_dynamixel_master src/my_dxl_master.cpp src/trajectory_generator.cpp)
+target_link_libraries(my_dynamixel_master ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${YAML_CPP_LIBRARIES})
 
 add_executable(my_dynamixel_operator src/my_operator.cpp)
 target_link_libraries(my_dynamixel_operator ${catkin_LIBRARIES} ${YAML_CPP_LIBRARIES})
 
-add_executable(parallel_robot_master src/parallel_robot_master.cpp src/trajectory_generator.cpp)
-target_link_libraries(parallel_robot_master ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${YAML_CPP_LIBRARIES})
+add_executable(multi_motors_demo src/multi_motors_demo.cpp src/my_dxl_controller.cpp)
+target_link_libraries(multi_motors_demo ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${YAML_CPP_LIBRARIES})
 
-add_executable(RLearning src/RLearning.cpp )
-target_link_libraries(RLearning ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
 
-add_executable(RL_3DofSerialRobot src/RL_3DofSerialRobot.cpp src/trajectory_generator.cpp)
-target_link_libraries(RL_3DofSerialRobot ${catkin_LIBRARIES} ${Eigen3_LIBRARIES} ${YAML_CPP_LIBRARIES})
 

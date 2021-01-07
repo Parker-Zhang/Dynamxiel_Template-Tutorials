@@ -1,6 +1,0 @@
-<launch>
-  <param name="trajectory_info" value="$(find my_dynamixel_workbench)/cfg/Wing.yaml"/>
-  <node name="parallel_robot_operator" pkg="my_dynamixel_workbench" type="my_dynamixel_operator"
-        required="true" output="screen" >
-  </node>
-</launch>

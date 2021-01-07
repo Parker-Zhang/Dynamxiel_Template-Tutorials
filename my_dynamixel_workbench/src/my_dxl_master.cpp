@@ -12,8 +12,6 @@
 #include<dynamixel_workbench_toolbox/dynamixel_workbench.h>
 #include<ros/ros.h>
 #include<my_dxl_master.h>
-
-
 using namespace std;
 
 

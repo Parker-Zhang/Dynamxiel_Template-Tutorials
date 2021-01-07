@@ -43,7 +43,6 @@ private:
   bool is_moving_ = false;
 
   // ROS Service Server
-  // ros::ServiceServer changeGoalPositonSrv;
 
 
   //ROS public
