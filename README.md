@@ -18,8 +18,8 @@ https://3bdab0d0.wiz03.com/wapp/pages/view/share/s/0XSH3g0Re17G2w9IJE12tWll2Hq3e
 （四）dynamxiel舵机ros使用指南——复现workbench
 https://3bdab0d0.wiz03.com/wapp/pages/view/share/s/0XSH3g0Re17G2w9IJE12tWll1-2hsg0eI17H229a7119rVoW
 
-（五）舵机Q-Learning学习指南
-https://3bdab0d0.wiz03.com/wapp/pages/view/share/s/0XSH3g0Re17G2w9IJE12tWll22Ualw0s6x7H2Nb84A0zbcfD
+（六）一种更方便的workbench实现 
+ https://3bdab0d0.wiz06.com/wapp/pages/view/share/s/0XSH3g0Re17G2w9IJE12tWll1cuMxg1gKN7H20Lo6J1k1NVv
 
 ### 模板源码链接
 
